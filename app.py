@@ -365,7 +365,7 @@ def delete_conversation_turn(conversation_id, turn_id):
     if len(remaining_messages) == len(conversation["messages"]):
         return jsonify({"error": "聊天轮次不存在"}), 404
 
-    conversation["messages"] = remaining_messages
+    # conversation["messages"] = remaining_messages
     save_conversations()
     return jsonify(conversation)
 
