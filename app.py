@@ -26,7 +26,8 @@ else:
 
 messages = []
 next_message_id = 1
-data_path = Path(__file__).parent / "data" / "conversations.json"
+data_dir = Path(os.getenv("LAB5_DATA_DIR", Path(__file__).parent / "data"))
+data_path = data_dir / "conversations.json"
 
 
 def load_conversations():
