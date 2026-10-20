@@ -34,8 +34,17 @@ jobs:
           $lab5VenvScripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install dependencies
+        env:
+          NO_PROXY: "*"
+          PIP_CONFIG_FILE: "nul"
         run: |
+          # 仅此步骤直连下载包，不修改 runner 主进程或系统代理设置。
+          foreach ($lab5ProxyName in @("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "PIP_PROXY", "PIP_EXTRA_INDEX_URL")) {
+            Remove-Item -LiteralPath "Env:$lab5ProxyName" -ErrorAction SilentlyContinue
+          }
           python -c "import sys; print(sys.executable)"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip --version
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m pip install --index-url https://pypi.org/simple -r requirements.txt -r requirements-dev.txt
 
